@@ -8,11 +8,15 @@
         "moduleResolution": "node",
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
-        "declaration": true
+        "declaration": true,
+        "jsx": "react",
+        "skipLibCheck": true
     },
+    "include": [
+        "./src/**/*"
+    ],
     "exclude": [
-        "../../node_modules",
-        "node_modules",
-        "dist"
+        "./dist/**/*",
+        "**/node_modules/**/*",
     ]
 }
