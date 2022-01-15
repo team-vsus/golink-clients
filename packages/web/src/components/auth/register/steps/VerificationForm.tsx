@@ -1,39 +1,36 @@
 import { Button, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, PinInput, PinInputField, Text, VStack } from '@chakra-ui/react';
+import { ControllerResponse, VerificationData } from '@golink-clients/common';
 import { Field, Form, Formik } from 'formik';
 import React from 'react';
-import { useConfirmCode } from '../../../../hooks/auth';
 
 type Props = {
     isDesktop: boolean;
     next: () => void;
+    submit: (data: VerificationData) => Promise<ControllerResponse>;
 }
 
-const VerificationForm: React.FC<Props> = ({ isDesktop, next }) => {
-    const mutation = useConfirmCode({
-        onSuccess: (data) => {
-            if (!data.failed) {
-                next()
-            }
-        }
-    });
+const VerificationForm: React.FC<Props> = ({ isDesktop, next, submit }) => {
+
     return (
         <>
             <VStack spacing={5} padding="50px" h="100%" w={!isDesktop ? "100%" : "442px"} align="normal" justify="center">
                 <VStack align="center">
-                    <Text fontSize="4xl" fontWeight="bold" color="#7E5959">Verficiation</Text>
+                    <Text fontSize="4xl" fontWeight="bold" color="brand.700">Verficiation</Text>
                     <Text fontSize="sm" color="#C9C2C4">Please type the verification code.</Text>
                 </VStack>
                 <Formik
                     initialValues={{
                         code: { parts: new Array(6).fill('') },
                     }}
-                    onSubmit={(values, actions) => {
+                    onSubmit={async (values, actions) => {
                         actions.setSubmitting(true);
-                        console.log(values)
-                        mutation.mutate(values.code.parts.join(""))
+                        let res = await submit({ code: values.code.parts.join("") })
+                        if (res === null) {
+                            next()
+                        }
                         actions.setSubmitting(false);
                     }}
-                >{({ errors, isSubmitting, touched }) => (
+                >{({ errors, isSubmitting }) => (
                     <Form style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
                         <FormControl>
                             <InputGroup justifyContent="center">
@@ -45,7 +42,7 @@ const VerificationForm: React.FC<Props> = ({ isDesktop, next }) => {
                             </InputGroup>
                             <FormErrorMessage>{errors.code}</FormErrorMessage>
                         </FormControl>
-                        <Button isLoading={isSubmitting} type="submit" w="50%" mt={4} color="white" bg="#EFA7A7">Verify</Button>
+                        <Button colorScheme='brand' isLoading={isSubmitting} type="submit" w="50%" mt={10}>Verify</Button>
                     </Form>
                 )}
                 </Formik>

@@ -1,11 +1,14 @@
-import { Button, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputRightElement, Stack, Text, useMediaQuery, VStack } from "@chakra-ui/react";
+import { Button, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputRightElement, Text, useMediaQuery, VStack, Link } from "@chakra-ui/react";
 import styled from "@emotion/styled";
+import { useMe } from "@golink-clients/common";
 import { Field, Form, Formik } from "formik";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useNavigate, Link as RouterLink, Navigate } from "react-router-dom";
 import Background from '../../../assets/login-bg.png';
+import { useAuth } from "../../../hooks/useAuth";
 
 type LoginProps = {
-    username: string;
+    email: string;
     password: string;
 }
 
@@ -16,6 +19,17 @@ type Props = {
 const LoginView: React.FC<Props> = ({ submit }) => {
     const [show, setShow] = React.useState(false)
     const [isDesktop] = useMediaQuery('(min-width: 1024px)')
+    const nav = useNavigate()
+    const { data, isLoading } = useMe();
+    const { authenticate } = useAuth();
+
+    if (isLoading) {
+        return null;
+    }
+
+    if (data && !data.failed) {
+        return <Navigate to="/app" />
+    }
 
     return (
         <>
@@ -23,17 +37,22 @@ const LoginView: React.FC<Props> = ({ submit }) => {
                 <InputContainer>
                     <VStack spacing={5} padding="50px" h="100%" w={!isDesktop ? "100%" : "442px"} align="left" justify="center"  >
                         <VStack align="left">
-                            <Text fontSize="4xl" fontWeight="bold" color="#7E5959">Welcome back!</Text>
-                            <Text fontSize="sm" color="#C9C2C4">Please enter your details.</Text>
+                            <Text fontSize="4xl" fontWeight="bold" color="brand.700">Welcome back!</Text>
+                            <Text fontSize="sm" color="brand.200">Please enter your details.</Text>
                         </VStack>
                         <Formik
                             initialValues={{
                                 email: '',
                                 password: ''
                             }}
-                            onSubmit={(values, actions) => {
-                                console.log({ values, actions });
-                                alert(JSON.stringify(values, null, 2));
+                            onSubmit={async (values, actions) => {
+                                actions.setSubmitting(true);
+                                let { data, error } = await submit(values);
+                                if (error === null) {
+                                    console.log("Authenticate", data, error)
+                                    authenticate(data);
+                                    nav("/app")
+                                }
                                 actions.setSubmitting(false);
                             }}
                         >{({ errors, isSubmitting, touched }) => (
@@ -41,7 +60,7 @@ const LoginView: React.FC<Props> = ({ submit }) => {
                                 <FormControl isInvalid={!!errors.email && touched.email}>
                                     <FormLabel>E-Mail</FormLabel>
                                     <InputGroup>
-                                        <Field name="email" placeholder="foobar@example.com" as={Input} type="email" />
+                                        <Field colorScheme="brand" name="email" placeholder="foobar@example.com" as={Input} type="email" />
                                     </InputGroup>
                                     <FormErrorMessage>{errors.email}</FormErrorMessage>
                                 </FormControl>
@@ -49,37 +68,37 @@ const LoginView: React.FC<Props> = ({ submit }) => {
                                     <FormLabel>
                                         <HStack justify="space-between">
                                             <Text>Password</Text>
-                                            <Text fontWeight="bold" fontSize="xs" color="#7E5959">Forgot Password?</Text>
+                                            <Link as={RouterLink} to="" fontWeight="bold" fontSize="xs" color="brand.700">Forgot Password?</Link>
                                         </HStack>
                                     </FormLabel>
                                     <InputGroup>
                                         <Field name="password" placeholder="Enter your password" as={Input} type={show ? "text" : "password"} />
                                         <InputRightElement width="4.5rem">
-                                            <Button h="1.75rem" size="sm" bg="#EFA7A7" color="white" onClick={() => setShow(!show)}>
+                                            <Button colorScheme='brand' h="1.75rem" size="sm" onClick={() => setShow(!show)}>
                                                 {show ? "Hide" : "Show"}
                                             </Button>
                                         </InputRightElement>
                                     </InputGroup>
                                     <FormErrorMessage>{errors.password}</FormErrorMessage>
                                 </FormControl>
-                                <Button isLoading={isSubmitting} type="submit" mt={4} w="100%" color="white" bg="#EFA7A7">Submit</Button>
+                                <Button colorScheme='brand' isLoading={isSubmitting} type="submit" mt={4} w="100%" >Submit</Button>
                             </Form>
                         )}
                         </Formik>
                         {!isDesktop && <Flex justify="center">
                             <HStack>
                                 <Text fontSize="sm" color="#C9C2C4" >Don't have an account?</Text>
-                                <Text fontWeight="bold" fontSize="sm" color="#7E5959">Register</Text>
+                                <Link as={RouterLink} to="/auth/register" fontWeight="bold" fontSize="sm" color="brand.700">Register</Link>
                             </HStack>
                         </Flex>}
                     </VStack>
                 </InputContainer>
                 {isDesktop && <DecorationContainer>
-                    <BackgroundImage src={Background}  />
+                    <BackgroundImage src={Background} />
                     <VStack position="absolute">
                         <Text fontSize="4xl" fontWeight="bold" color="white">Don't have an account?</Text>
                         <Text fontSize="sm" color="white">Click here to create an account</Text>
-                        <Button>Register</Button>
+                        <Button colorScheme="brand" variant="outline" color="white" _hover={{ color: "brand.700" }} onClick={() => nav("/auth/register")}>Register</Button>
                     </VStack>
                 </DecorationContainer>}
             </Container>

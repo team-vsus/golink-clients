@@ -5,27 +5,23 @@ import App from './App';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import { StepsStyleConfig as Steps } from 'chakra-ui-steps';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { golinkColors } from '@golink-clients/common';
 
 const theme = extendTheme({
     components: {
         Steps,
     },
     colors: {
-        brand: {
-            50: '#ffe6e6',
-            100: '#f6bdbd',
-            200: '#eb9393',
-            300: '#e36969',
-            400: '#da3f3e',
-            500: '#EFA7A7',
-            600: '#961c1c',
-            700: '#6c1414',
-            800: '#420a0b',
-            900: '#1c0101',
-        },
+        brand: golinkColors
     }
 })
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+        },
+    },
+})
 
 
 ReactDOM.render(
