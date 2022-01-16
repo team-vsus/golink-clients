@@ -29,7 +29,6 @@ const LoginView: React.FC<Props> = ({ submit }) => {
     }
 
     if (data && !data.failed) {
-        console.log("Redirect to /app - LoginView")
         return <Navigate to="/app?from=login" />
     }
 
@@ -51,7 +50,6 @@ const LoginView: React.FC<Props> = ({ submit }) => {
                                 actions.setSubmitting(true);
                                 let { data, error } = await submit(values);
                                 if (error === null) {
-                                    console.log("1")
                                     nav("/app")
                                 }
                                 actions.setSubmitting(false);

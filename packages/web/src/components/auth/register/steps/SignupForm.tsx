@@ -30,7 +30,6 @@ const SignupForm: React.FC<Props> = ({ isDesktop, next, submit }) => {
                     onSubmit={async (values, actions) => {
                         actions.setSubmitting(true);
                         let res = await submit(values)
-                        console.log("res", res);
                         if (res.error === null) {
                             next();
                         }

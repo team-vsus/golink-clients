@@ -7,7 +7,6 @@ import { useAuth } from '@golink-clients/common';
 import { useQueryClient } from 'react-query';
 
 export const Home = () => {
-    console.log("Get me - Home");
     useAuth();
 
     const queryClient = useQueryClient();

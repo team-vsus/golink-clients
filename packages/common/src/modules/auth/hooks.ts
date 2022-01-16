@@ -52,7 +52,6 @@ export const logout = async () => {
 export const useLogout = (options?: Omit<UseMutationOptions<any, unknown, void, unknown>, "mutationFn"> | undefined) => useMutation(logout, options);
 
 const confirmCode = async (data: VerificationData) => {
-    console.log(JSON.stringify({ code: data.code }))
     const res = await fetch(`${BASE_URL}/api/v1/auth/verify`, {
         method: 'POST',
         headers: {
@@ -70,7 +69,6 @@ export const useConfirmCode = (options?: Omit<UseMutationOptions<any, unknown, a
 }
 
 export const getMe = async () => {
-    console.log("Make req")
     return fetch(`${BASE_URL}/api/v1/users/me`, {
         credentials: 'include'
     }).then(r => r.json())
