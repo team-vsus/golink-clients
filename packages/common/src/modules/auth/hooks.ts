@@ -1,6 +1,8 @@
 import { useMutation, UseMutationOptions, useQuery, UseQueryOptions } from 'react-query';
-import { LoginData, RegisterData, VerificationData } from '.';
+import { AuthUser, LoginData, RegisterData, VerificationData } from '.';
 import { BASE_URL } from '../../constants';
+import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
 const register = async (user: RegisterData) => {
     const response = await fetch(`${BASE_URL}/api/v1/auth/register`, {
@@ -38,6 +40,16 @@ export const useLogin = (options?: Omit<UseMutationOptions<any, unknown, any, un
     return useMutation(login, options)
 }
 
+export const logout = async () => {
+    const res = await fetch(`${BASE_URL}/api/v1/auth/logout`, {
+        method: 'POST',
+        credentials: 'include'
+    });
+    return res.json();
+}
+
+//export const useLogout = (options?: Omit<UseQueryOptions<any, unknown, any, "logout">, "queryKey" | "queryFn">) => useQuery('logout', logout, options);
+export const useLogout = (options?: Omit<UseMutationOptions<any, unknown, void, unknown>, "mutationFn"> | undefined) => useMutation(logout, options);
 
 const confirmCode = async (data: VerificationData) => {
     console.log(JSON.stringify({ code: data.code }))
@@ -65,3 +77,15 @@ export const getMe = async () => {
 };
 
 export const useMe = (options?: Omit<UseQueryOptions<any, unknown, any, "me">, "queryKey" | "queryFn">) => useQuery('me', getMe, options);
+
+export const useAuth = () => {
+    const nav = useNavigate();
+    const { data, isLoading, isFetching } = useMe();
+
+    React.useEffect(() => {
+        if (!isLoading && !isFetching && data && data.failed === true) {
+            nav(`/auth/login?next=${window.location.pathname}`)
+        }
+    }, [isLoading, data])
+
+}

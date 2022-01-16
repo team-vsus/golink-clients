@@ -1,8 +1,9 @@
 import { Button, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputRightElement, Text, useMediaQuery, VStack, Link } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { useMe } from "@golink-clients/common";
+import { AuthUser, useMe } from "@golink-clients/common";
 import { Field, Form, Formik } from "formik";
 import React from "react";
+import { useQueryClient } from "react-query";
 import { useNavigate, Link as RouterLink, Navigate } from "react-router-dom";
 import Background from '../../../assets/login-bg.png';
 import { useAuth } from "../../../hooks/useAuth";
@@ -20,15 +21,16 @@ const LoginView: React.FC<Props> = ({ submit }) => {
     const [show, setShow] = React.useState(false)
     const [isDesktop] = useMediaQuery('(min-width: 1024px)')
     const nav = useNavigate()
-    const { data, isLoading } = useMe();
-    const { authenticate } = useAuth();
 
-    if (isLoading) {
+    const { data, isLoading, isFetching } = useMe();
+
+    if (isLoading || isFetching) {
         return null;
     }
 
     if (data && !data.failed) {
-        return <Navigate to="/app" />
+        console.log("Redirect to /app - LoginView")
+        return <Navigate to="/app?from=login" />
     }
 
     return (
@@ -49,8 +51,7 @@ const LoginView: React.FC<Props> = ({ submit }) => {
                                 actions.setSubmitting(true);
                                 let { data, error } = await submit(values);
                                 if (error === null) {
-                                    console.log("Authenticate", data, error)
-                                    authenticate(data);
+                                    console.log("1")
                                     nav("/app")
                                 }
                                 actions.setSubmitting(false);
