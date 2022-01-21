@@ -1,5 +1,5 @@
 import { useMutation, UseMutationOptions, useQuery, UseQueryOptions } from 'react-query';
-import { AuthUser, LoginData, RegisterData, VerificationData } from '.';
+import { AuthUser, CompanyData, LoginData, RegisterData, VerificationData } from '.';
 import { BASE_URL } from '../../constants';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
@@ -66,6 +66,23 @@ const confirmCode = async (data: VerificationData) => {
 
 export const useConfirmCode = (options?: Omit<UseMutationOptions<any, unknown, any, unknown>, "mutationFn"> | undefined) => {
     return useMutation(confirmCode, options);
+}
+
+const createCompany = async (data: CompanyData) => {
+    const res = await fetch(`${BASE_URL}/api/v1/company`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data)
+    });
+    if (res.status === 200)
+        return res.json();
+    return new Promise((res) => res({ failed: true }));
+}
+
+export const useCreateCompany = (options?: Omit<UseMutationOptions<any, unknown, any, unknown>, "mutationFn"> | undefined) => {
+    return useMutation(createCompany, options);
 }
 
 export const getMe = async () => {

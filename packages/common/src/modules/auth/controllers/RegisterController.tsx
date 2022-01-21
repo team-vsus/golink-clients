@@ -1,5 +1,5 @@
 import React from 'react';
-import { VerificationData } from '..';
+import { CompanyData, useCreateCompany, VerificationData } from '..';
 import { useConfirmCode, useRegister } from '../hooks';
 import { RegisterData, SubmitFunctions } from '../types';
 
@@ -14,6 +14,7 @@ type Props = {
 export const RegisterController: React.FC<Props> = ({ children }) => {
     const registerMutation = useRegister();
     const verificationMutation = useConfirmCode();
+    const createCompanyMutation = useCreateCompany();
 
     const submitUser = async (values: RegisterProps) => {
         try {
@@ -33,8 +34,13 @@ export const RegisterController: React.FC<Props> = ({ children }) => {
         }
     }
 
-    const submitCompany = async () => {
-        return { data: null, error: null }
+    const submitCompany = async (values: CompanyData) => {
+        try {
+            const data = await createCompanyMutation.mutateAsync(values)
+            return { data, error: null }
+        } catch (error) {
+            return { data: null, error: error as Error }
+        }
     }
 
     return children({ submitUser, submitCompany, submitVerification })

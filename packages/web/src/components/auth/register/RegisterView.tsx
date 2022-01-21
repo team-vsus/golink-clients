@@ -7,6 +7,7 @@ import SignupForm from './steps/SignupForm';
 import VerificationForm from './steps/VerificationForm';
 import { useNavigate } from 'react-router-dom'
 import { SubmitFunctions } from '@golink-clients/common';
+import CompanyForm from './steps/CompanyForm';
 
 type Props = {
     submits: SubmitFunctions;
@@ -41,6 +42,7 @@ const RegisterView: React.FC<Props> = ({ submits }) => {
                                     <StepWrapper>
                                         {index === 0 && <SignupForm isDesktop={isDesktop} next={nextStep} submit={submits.submitUser} />}
                                         {index === 1 && <VerificationForm isDesktop={isDesktop} next={nextStep} submit={submits.submitVerification} />}
+                                        {index === 2 && <CompanyForm isDesktop={isDesktop} next={nextStep} submit={submits.submitCompany} />}
                                     </StepWrapper>
                                 </Step>
                             ))}
