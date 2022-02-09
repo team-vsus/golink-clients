@@ -1,12 +1,11 @@
 import { Button, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputRightElement, Text, useMediaQuery, VStack, Link } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { AuthUser, useMe } from "@golink-clients/common";
+import { ControllerResponse, useMe } from "@golink-clients/common";
 import { Field, Form, Formik } from "formik";
 import React from "react";
-import { useQueryClient } from "react-query";
 import { useNavigate, Link as RouterLink, Navigate } from "react-router-dom";
 import Background from '../../../assets/login-bg.png';
-import { useAuth } from "../../../hooks/useAuth";
+import { Container } from '../../shared/Styles';
 
 type LoginProps = {
     email: string;
@@ -14,7 +13,7 @@ type LoginProps = {
 }
 
 type Props = {
-    submit: (values: LoginProps) => any
+    submit: (values: LoginProps) => Promise<ControllerResponse>
 }
 
 const LoginView: React.FC<Props> = ({ submit }) => {
@@ -48,7 +47,7 @@ const LoginView: React.FC<Props> = ({ submit }) => {
                             }}
                             onSubmit={async (values, actions) => {
                                 actions.setSubmitting(true);
-                                let { data, error } = await submit(values);
+                                let { error } = await submit(values);
                                 if (error === null) {
                                     nav("/app")
                                 }
@@ -67,7 +66,7 @@ const LoginView: React.FC<Props> = ({ submit }) => {
                                     <FormLabel>
                                         <HStack justify="space-between">
                                             <Text>Password</Text>
-                                            <Link as={RouterLink} to="" fontWeight="bold" fontSize="xs" color="brand.700">Forgot Password?</Link>
+                                            <Link as={RouterLink} to="/auth/forgot-pw" fontWeight="bold" fontSize="xs" color="brand.700">Forgot Password?</Link>
                                         </HStack>
                                     </FormLabel>
                                     <InputGroup>
@@ -104,12 +103,6 @@ const LoginView: React.FC<Props> = ({ submit }) => {
         </>
     );
 }
-
-const Container = styled.div`
-    display: flex;
-    height: 100%;
-    width: 100%;
-`;
 
 const InputContainer = styled.div`
     height: 100%; 

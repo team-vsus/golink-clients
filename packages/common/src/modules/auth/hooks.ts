@@ -1,8 +1,42 @@
 import { useMutation, UseMutationOptions, useQuery, UseQueryOptions } from 'react-query';
-import { AuthUser, CompanyData, LoginData, RegisterData, VerificationData } from '.';
+import { AuthUser, CompanyData, ForgotPasswordData, LoginData, RegisterData, ResetPasswordData, VerificationData } from '.';
 import { BASE_URL } from '../../constants';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
+
+const resetPassword = async (data: ResetPasswordData) => {
+    const response = await fetch(`${BASE_URL}/api/v1/auth/reset/password`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data)
+    });
+    if (response.status === 200)
+        return response.json();
+    return new Promise((res) => res({ failed: true }));
+}
+
+export const useResetPassword = (options?: Omit<UseMutationOptions<any, unknown, any, unknown>, "mutationFn"> | undefined) => {
+    return useMutation(resetPassword, options)
+}
+
+const forgotPassword = async (data: ForgotPasswordData) => {
+    const response = await fetch(`${BASE_URL}/api/v1/auth/forgot/password`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data)
+    });
+    if (response.status === 200)
+        return response.json();
+    return new Promise((res) => res({ failed: true }));
+}
+
+export const useForgotPassword = (options?: Omit<UseMutationOptions<any, unknown, any, unknown>, "mutationFn"> | undefined) => {
+    return useMutation(forgotPassword, options)
+}
 
 const register = async (user: RegisterData) => {
     const response = await fetch(`${BASE_URL}/api/v1/auth/register`, {
@@ -48,7 +82,6 @@ export const logout = async () => {
     return res.json();
 }
 
-//export const useLogout = (options?: Omit<UseQueryOptions<any, unknown, any, "logout">, "queryKey" | "queryFn">) => useQuery('logout', logout, options);
 export const useLogout = (options?: Omit<UseMutationOptions<any, unknown, void, unknown>, "mutationFn"> | undefined) => useMutation(logout, options);
 
 const confirmCode = async (data: VerificationData) => {

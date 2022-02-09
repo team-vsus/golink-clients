@@ -1,25 +1,22 @@
 import React from 'react';
-import { useLogin, useRegister } from '../hooks';
-
-type LoginProps = {
-    email: string;
-    password: string;
-}
+import { LoginData } from '..';
+import { ControllerResponse } from '../../..';
+import { useLogin} from '../hooks';
 
 type Props = {
     children: (
-        submit: (values: LoginProps) => any
+        submit: (values: LoginData) => Promise<ControllerResponse>
     ) => JSX.Element | null
 }
 
 export const LoginController: React.FC<Props> = ({ children }) => {
     const mutation = useLogin();
-    const submit = async (values: LoginProps) => {
+    const submit = async (values: LoginData) => {
         try {
             const data = await mutation.mutateAsync(values)
             return { data, error: null }
         } catch (error) {
-            return { data: null, error };
+            return { data: null, error: error as Error };
         }
     }
 

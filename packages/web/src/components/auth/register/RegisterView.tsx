@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputRightElement, Stack, Text, useMediaQuery, VStack } from "@chakra-ui/react";
+import { Box, Button, Text, useMediaQuery, VStack } from "@chakra-ui/react";
 import Background from '../../../assets/register-bg.png';
 import styled from '@emotion/styled';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
@@ -8,6 +8,7 @@ import VerificationForm from './steps/VerificationForm';
 import { useNavigate } from 'react-router-dom'
 import { SubmitFunctions } from '@golink-clients/common';
 import CompanyForm from './steps/CompanyForm';
+import { Container } from '../../shared/Styles';
 
 type Props = {
     submits: SubmitFunctions;
@@ -53,12 +54,6 @@ const RegisterView: React.FC<Props> = ({ submits }) => {
         </>
     );
 }
-
-const Container = styled.div`
-    display: flex;
-    height: 100%;
-    width: 100%;
-`;
 
 const DecorationContainer = styled.div`
     height: 100%; 

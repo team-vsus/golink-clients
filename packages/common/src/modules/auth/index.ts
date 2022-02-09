@@ -1,4 +1,6 @@
 export * from './controllers/LoginController'
 export * from './controllers/RegisterController'
+export * from './controllers/ForgotPasswordController'
+export * from './controllers/ResetPasswordController'
 export * from './types'
 export * from './hooks'

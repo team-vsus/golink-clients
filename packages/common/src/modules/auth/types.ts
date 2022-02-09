@@ -6,6 +6,15 @@ export type SubmitFunctions = {
     submitCompany: (values: CompanyData) => Promise<ControllerResponse>;
 }
 
+export type ResetPasswordData = {
+    token?: string;
+    newPassword: string;
+}
+
+export type ForgotPasswordData = {
+    email: string;
+}
+
 export type RegisterData = {
     firstname: string;
     lastname: string;
