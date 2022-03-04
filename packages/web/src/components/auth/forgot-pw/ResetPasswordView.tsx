@@ -4,10 +4,10 @@ import WaveTopRight from '../../../assets/reset-pw-top-right.png';
 import WaveBottomLeft from '../../../assets/reset-pw-bottom-left.png';
 import { Button, FormControl, FormErrorMessage, FormLabel, Img, Input, InputGroup, Link, VStack, Text, Alert, AlertDescription, AlertIcon, AlertTitle } from '@chakra-ui/react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
-import styled from '@emotion/styled';
 import { Formik, Form, Field } from 'formik';
 import { useMediaQuery } from '@chakra-ui/react';
 import { ControllerResponse, ResetPasswordData } from '@golink-clients/common';
+import { InputContainer } from '../../shared/Styles';
 
 type Props = {
     submit: (data: ResetPasswordData) => Promise<ControllerResponse>;
@@ -37,7 +37,7 @@ const ResetPasswordView: React.FC<Props> = ({ submit }) => {
                             }}
                             onSubmit={async (values, actions) => {
                                 actions.setSubmitting(true);
-                                let { error } = await submit({newPassword: values.newPassword, token: params.token});
+                                let { error } = await submit({ newPassword: values.newPassword, token: params.token });
                                 if (error === null) {
                                     setSuccess(true);
                                 }
@@ -80,13 +80,5 @@ const ResetPasswordView: React.FC<Props> = ({ submit }) => {
         </Container>
     );
 }
-
-const InputContainer = styled.div`
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
 
 export default ResetPasswordView;

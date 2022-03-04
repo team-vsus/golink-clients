@@ -4,10 +4,10 @@ import WaveTopLeft from '../../../assets/forgot-pw-top-left.png';
 import WaveBottomRight from '../../../assets/forgot-pw-bottom-right.png';
 import { Button, Flex, FormControl, FormErrorMessage, FormLabel, Img, Input, InputGroup, Link, VStack, Text, Alert, AlertDescription, AlertIcon, AlertTitle } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
-import styled from '@emotion/styled';
 import { Formik, Form, Field } from 'formik';
 import { useMediaQuery } from '@chakra-ui/react';
 import { ControllerResponse, ForgotPasswordData } from '@golink-clients/common';
+import { InputContainer } from '../../shared/Styles';
 
 type Props = {
     submit: (data: ForgotPasswordData) => Promise<ControllerResponse>;
@@ -81,13 +81,5 @@ const ForgotPasswordView: React.FC<Props> = ({ submit }) => {
         </Container>
     );
 }
-
-const InputContainer = styled.div`
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
 
 export default ForgotPasswordView;

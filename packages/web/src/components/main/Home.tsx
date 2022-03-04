@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '@golink-clients/common';
 import { useQueryClient } from 'react-query';
+import Navbar from '../shared/Navbar';
 
 export const Home = () => {
     useAuth();
@@ -16,17 +17,7 @@ export const Home = () => {
 
     return (
         <Container>
-            <Box h="100%" w="100%" bg="brand.500" alignItems="center" justifyContent="center" d="flex">
-                <VStack>
-                    <Text fontWeight="bold" color="white" fontSize="5xl">You are logged in!</Text>
-                    <Code>
-                        {JSON.stringify(me)}
-                    </Code>
-                    <Button colorScheme="brand" variant="outline" color="white" _hover={{ color: "brand.700" }} onClick={() => {
-                        mutation.mutate();
-                    }}>Logout</Button>
-                </VStack>
-            </Box>
+            <Navbar />
         </Container>
     )
 }
