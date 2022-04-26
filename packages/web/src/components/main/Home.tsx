@@ -1,11 +1,11 @@
-import { Box, Button, Code, Text, VStack } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { useLogout, useMe } from '@golink-clients/common';
-import React, { useEffect } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@golink-clients/common';
 import { useQueryClient } from 'react-query';
 import Navbar from '../shared/Navbar';
+import { LinkItem } from '../../types';
+import { Dashboard, PeopleAlt, Work, Chat } from '@mui/icons-material';
 
 export const Home = () => {
     useAuth();
@@ -15,9 +15,16 @@ export const Home = () => {
     const nav = useNavigate();
     const mutation = useLogout({ onSuccess: () => nav("/auth/login") });
 
+    const linkItems: LinkItem[] = [
+        { title: "Dashboard", icon: Dashboard, to: "/app/" },
+        { title: "Job-Offers", icon: Work, to: "/app/job-offers" },
+        { title: "Candidates", icon: PeopleAlt, to: "/app/candidates" },
+        { title: "Chat", icon: Chat, to: "/app/chat" },
+    ];
+
     return (
         <Container>
-            <Navbar />
+            <Navbar linkItems={linkItems} />
         </Container>
     )
 }
