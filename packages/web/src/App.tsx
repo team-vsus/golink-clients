@@ -3,6 +3,7 @@ import ForgotPasswordConnector from './components/auth/forgot-pw/ForgotPasswordC
 import ResetPasswordConnector from './components/auth/forgot-pw/ResetPasswordConnector';
 import LoginConnector from './components/auth/login/LoginConnector';
 import RegisterConnector from './components/auth/register/RegisterConnector';
+import { JobAdView } from './components/jobs/JobAdView';
 import { Home } from './components/main/Home';
 
 function App() {

@@ -1,15 +1,25 @@
-import { Box, Icon, Text, Flex, Avatar, Heading } from '@chakra-ui/react';
+import { Box, Icon, Text, Flex, Avatar, Heading, useDisclosure } from '@chakra-ui/react';
 import React from 'react';
 import { LinkItem } from '../../types';
 import NavItem from './NavItem';
 import { ArrowCircleLeft, ArrowCircleRight, ArrowRight, Menu } from '@mui/icons-material';
+import SettingsModal from '../main/SettingsModal';
+import { Link, useLocation } from 'react-router-dom';
+import { Dashboard, PeopleAlt, Work, Chat } from '@mui/icons-material';
 
-type NavbarProps = {
-    linkItems: LinkItem[];
-}
+const linkItems: LinkItem[] = [
+    { title: "Dashboard", icon: Dashboard, to: "/app" },
+    { title: "Job-Offers", icon: Work, to: "/app/job-offers" },
+    { title: "Candidates", icon: PeopleAlt, to: "/app/candidates" },
+    { title: "Chat", icon: Chat, to: "/app/chat" },
+];
 
-const Navbar: React.FC<NavbarProps> = ({ linkItems }) => {
-    const [isOpen, setOpenNav] = React.useState(true);
+
+const Navbar: React.FC = () => {
+    const [isOpen, setOpenNav] = React.useState(false);
+    const settingsDisclosure = useDisclosure()
+    const location = useLocation();
+    console.log("Loc", location);
 
     return (
         <>
@@ -19,6 +29,7 @@ const Navbar: React.FC<NavbarProps> = ({ linkItems }) => {
                 bg="brand.500"
                 position="fixed"
                 transition="all 200ms ease"
+                zIndex="10"
             >
                 <Box
                     p={0}
@@ -43,7 +54,7 @@ const Navbar: React.FC<NavbarProps> = ({ linkItems }) => {
                         </Box>
                     </Box>
                     {linkItems.map((link, i) => (
-                        <NavItem title={link.title} to={link.to} icon={link.icon} isOpen={isOpen} isSelected={i === 0} />
+                        <NavItem key={i} title={link.title} to={link.to} icon={link.icon} isOpen={isOpen} isSelected={link.to === location.pathname} />
                     ))}
 
                     <Box
@@ -78,7 +89,16 @@ const Navbar: React.FC<NavbarProps> = ({ linkItems }) => {
                             w="100%"
                             h={"4rem"}
                         >
-                            <Avatar size="md" minWidth="2rem" margin="0 1rem" />
+                            <Avatar
+                                sx={{
+                                    _hover: {
+                                        cursor: 'pointer'
+                                    }
+                                }}
+                                onClick={settingsDisclosure.onOpen}
+                                size="md"
+                                minWidth="2rem"
+                                margin="0 1rem" />
                             <Flex
                                 visibility={!isOpen ? "hidden" : "visible"}
                                 opacity={!isOpen ? "0" : "1"}
@@ -92,6 +112,7 @@ const Navbar: React.FC<NavbarProps> = ({ linkItems }) => {
                     </Box>
                 </Box>
             </Box>
+            <SettingsModal disclosure={settingsDisclosure} />
         </>
     );
 }

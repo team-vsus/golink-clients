@@ -1,4 +1,4 @@
-export const BASE_URL = "http://localhost:8080"
+export const BASE_URL = "http://10.91.1.71:8080"
 export const golinkColors = {
     50: "#EFF1F6",
     100: "#D2D7E5",

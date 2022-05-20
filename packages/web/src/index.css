@@ -10,3 +10,8 @@ body,
 #root {
   height: 100%;
 }
+
+main {
+    margin-left: 75px;
+    width: 100%;
+}
