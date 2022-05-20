@@ -1,10 +1,11 @@
-import { Box, Text, Tabs, TabList, Tab, TabPanels, TabPanel, Table, TableCaption, Tbody, Td, Tfoot, Th, Thead, Tr, Flex, Button } from '@chakra-ui/react';
+import { Box, Text, Tabs, TabList, Tab, TabPanels, TabPanel } from '@chakra-ui/react';
 import JobsTopBar from "../shared/JobsTopBar";
-import { JobAdItem } from './JobAdItem';
+import MainWrapper from '../shared/MainWrapper';
+import { JobAdItem } from './JobOffersItem';
 
 const JobsView: React.FC = () => {
     return (
-        <main>
+        <MainWrapper>
             <Box p={4}>
                 <JobsTopBar></JobsTopBar>
                 <Text fontSize="3xl" fontWeight="bold" mt={4} color="brand.500">Jobs</Text>
@@ -29,7 +30,7 @@ const JobsView: React.FC = () => {
                     </TabPanels>
                 </Tabs>
             </Box>
-        </main>
+        </MainWrapper>
     );
 }
 
