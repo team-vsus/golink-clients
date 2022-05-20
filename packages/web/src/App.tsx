@@ -4,6 +4,7 @@ import ResetPasswordConnector from './components/auth/forgot-pw/ResetPasswordCon
 import LoginConnector from './components/auth/login/LoginConnector';
 import RegisterConnector from './components/auth/register/RegisterConnector';
 import { CandidateList } from './components/main/CandidateList/CandidateList';
+import { JobAdView } from './components/jobs/JobAdView';
 import { Home } from './components/main/Home';
 
 function App() {

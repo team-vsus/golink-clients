@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
 import { useLogout, useMe } from '@golink-clients/common';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@golink-clients/common';
 import { useQueryClient } from 'react-query';
 import Navbar from '../shared/Navbar';
-import { LinkItem } from '../../types';
-import { Dashboard, PeopleAlt, Work, Chat } from '@mui/icons-material';
+import JobsView from '../jobs/JobsView';
+import { JobAdView } from '../jobs/JobAdView';
 
 export const Home = () => {
     useAuth();
@@ -14,17 +14,12 @@ export const Home = () => {
     const me = queryClient.getQueryData("me");
     const nav = useNavigate();
     const mutation = useLogout({ onSuccess: () => nav("/auth/login") });
-
-    const linkItems: LinkItem[] = [
-        { title: "Dashboard", icon: Dashboard, to: "/app/" },
-        { title: "Job-Offers", icon: Work, to: "/app/job-offers" },
-        { title: "Candidates", icon: PeopleAlt, to: "/app/candidates" },
-        { title: "Chat", icon: Chat, to: "/app/chat" },
-    ];
+    const location = useLocation();
 
     return (
         <Container>
-            <Navbar linkItems={linkItems} />
+            <Navbar />
+            <JobsView />
         </Container>
     )
 }
