@@ -6,6 +6,7 @@ import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import { StepsStyleConfig as Steps } from 'chakra-ui-steps';
 import { QueryCache, QueryClient, QueryClientProvider } from 'react-query';
 import { golinkColors } from '@golink-clients/common';
+import registerServiceWorker from "./serviceworker";
 
 const theme = extendTheme({
     components: {
@@ -38,3 +39,5 @@ ReactDOM.render(
     </React.StrictMode>,
     document.getElementById('root')
 );
+
+registerServiceWorker();
