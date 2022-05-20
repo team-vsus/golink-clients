@@ -14,7 +14,7 @@ export const JobAdItem: React.FC<Props> = ({ jobTitle, location, createdAt, appl
             sx={{
                 "_hover": {
                     cursor: 'pointer',
-                    bg: "brand.100"
+                    border: "2px solid #7A8AB3",
                 }
             }}
             border="2px solid #D2D7E5"
