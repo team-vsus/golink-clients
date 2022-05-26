@@ -6,6 +6,7 @@ import { ArrowCircleLeft, ArrowCircleRight, ArrowRight, Menu } from '@mui/icons-
 import SettingsModal from '../main/SettingsModal';
 import { Link, useLocation } from 'react-router-dom';
 import { Dashboard, PeopleAlt, Work, Chat } from '@mui/icons-material';
+import { useNavsize } from '../../store/useNavsize';
 
 const linkItems: LinkItem[] = [
     { title: "Dashboard", icon: Dashboard, to: "/app" },
@@ -16,7 +17,8 @@ const linkItems: LinkItem[] = [
 
 
 const Navbar: React.FC = () => {
-    const [isOpen, setOpenNav] = React.useState(false);
+    //const [isOpen, setOpenNav] = React.useState(false);
+    const {isNavOpen, setNavOpen} = useNavsize();
     const settingsDisclosure = useDisclosure()
     const location = useLocation();
     console.log("Loc", location);
@@ -25,7 +27,7 @@ const Navbar: React.FC = () => {
         <>
             <Box
                 h="100vh"
-                w={!isOpen ? "75px" : "220px"}
+                w={!isNavOpen ? "75px" : "220px"}
                 bg="brand.500"
                 position="fixed"
                 transition="all 200ms ease"
@@ -50,11 +52,11 @@ const Navbar: React.FC = () => {
                             h={"4rem"}
                         >
                             <Avatar size="md" minWidth="2rem" margin="0 1rem" />
-                            <Heading display={!isOpen ? "none" : "block"} color="brand.50" size="lg">Golink</Heading>
+                            <Heading display={!isNavOpen ? "none" : "block"} color="brand.50" size="lg">Golink</Heading>
                         </Box>
                     </Box>
                     {linkItems.map((link, i) => (
-                        <NavItem key={i} title={link.title} to={link.to} icon={link.icon} isOpen={isOpen} isSelected={link.to === location.pathname} />
+                        <NavItem key={i} title={link.title} to={link.to} icon={link.icon} isOpen={isNavOpen} isSelected={link.to === location.pathname} />
                     ))}
 
                     <Box
@@ -64,19 +66,19 @@ const Navbar: React.FC = () => {
                         <Box
                             display="flex"
                             alignItems="center"
-                            justifyContent={!isOpen ? "flex-start" : "center"}
+                            justifyContent={!isNavOpen ? "flex-start" : "center"}
                             w="100%"
                             h={"4rem"}
                             transition="all 200ms ease"
                         >
                             <Icon
-                                as={!isOpen ? ArrowCircleRight : ArrowCircleLeft}
+                                as={!isNavOpen ? ArrowCircleRight : ArrowCircleLeft}
                                 fontSize="3xl"
                                 minWidth="2rem"
                                 margin="0 1.5rem"
                                 color="brand.50"
                                 _hover={{ cursor: 'pointer' }}
-                                onClick={() => setOpenNav(!isOpen)}
+                                onClick={() => setNavOpen(!isNavOpen)}
                             />
                         </Box>
                     </Box>
@@ -100,8 +102,8 @@ const Navbar: React.FC = () => {
                                 minWidth="2rem"
                                 margin="0 1rem" />
                             <Flex
-                                visibility={!isOpen ? "hidden" : "visible"}
-                                opacity={!isOpen ? "0" : "1"}
+                                visibility={!isNavOpen ? "hidden" : "visible"}
+                                opacity={!isNavOpen ? "0" : "1"}
                                 transition="visibility 0s, opacity 200ms ease"
                                 flexDir="column"
                             >
