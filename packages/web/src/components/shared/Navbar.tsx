@@ -2,7 +2,7 @@ import { Box, Icon, Text, Flex, Avatar, Heading, useDisclosure } from '@chakra-u
 import React from 'react';
 import { LinkItem } from '../../types';
 import NavItem from './NavItem';
-import { ArrowCircleLeft, ArrowCircleRight, ArrowRight, Menu } from '@mui/icons-material';
+import { ArrowCircleLeft, ArrowCircleRight, ArrowRight, Menu, Settings } from '@mui/icons-material';
 import SettingsModal from '../main/SettingsModal';
 import { Link, useLocation } from 'react-router-dom';
 import { Dashboard, PeopleAlt, Work, Chat } from '@mui/icons-material';
@@ -13,6 +13,7 @@ const linkItems: LinkItem[] = [
     { title: "Job-Offers", icon: Work, to: "/app/job-offers" },
     { title: "Candidates", icon: PeopleAlt, to: "/app/candidates" },
     { title: "Chat", icon: Chat, to: "/app/chat" },
+    { title: "Settings", icon: Settings, to: "/app/settings" },
 ];
 
 

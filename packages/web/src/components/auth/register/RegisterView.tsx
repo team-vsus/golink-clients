@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Button, Text, useMediaQuery, VStack } from "@chakra-ui/react";
 import Background from '../../../assets/register-bg.png';
 import styled from '@emotion/styled';
@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import { SubmitFunctions } from '@golink-clients/common';
 import CompanyForm from './steps/CompanyForm';
 import { Container } from '../../shared/Styles';
+import { useIsApplicant } from '../../../store/useIsApplicant';
 
 type Props = {
     submits: SubmitFunctions;
@@ -23,6 +24,7 @@ const RegisterView: React.FC<Props> = ({ submits }) => {
     });
 
     const nav = useNavigate();
+    const { isApplicant } = useIsApplicant();
 
     return (
         <>
@@ -38,7 +40,7 @@ const RegisterView: React.FC<Props> = ({ submits }) => {
                 <InputContainer>
                     <Box w="100%">
                         <Steps p={`0 ${!isDesktop ? "5%" : "10%"}`} activeStep={activeStep} colorScheme="brand">
-                            {steps.map(({ label }, index) => (
+                            {(isApplicant ? [...steps.slice(0, -1)] : [...steps]).map(({ label }, index) => (
                                 <Step label={label} key={label}>
                                     <StepWrapper>
                                         {index === 0 && <SignupForm isDesktop={isDesktop} next={nextStep} submit={submits.submitUser} />}
@@ -51,6 +53,7 @@ const RegisterView: React.FC<Props> = ({ submits }) => {
                     </Box>
                 </InputContainer>
             </Container>
+
         </>
     );
 }

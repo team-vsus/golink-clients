@@ -2,6 +2,7 @@ import { Button, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Input, 
 import { ControllerResponse, VerificationData } from '@golink-clients/common';
 import { Field, Form, Formik } from 'formik';
 import React from 'react';
+import { useIsApplicant } from '../../../../store/useIsApplicant';
 
 type Props = {
     isDesktop: boolean;
@@ -10,6 +11,7 @@ type Props = {
 }
 
 const VerificationForm: React.FC<Props> = ({ isDesktop, next, submit }) => {
+    const { isApplicant } = useIsApplicant();
     return (
         <>
             <VStack spacing={5} padding="50px" h="100%" w={!isDesktop ? "100%" : "442px"} align="normal" justify="center">
@@ -23,7 +25,7 @@ const VerificationForm: React.FC<Props> = ({ isDesktop, next, submit }) => {
                     }}
                     onSubmit={async (values, actions) => {
                         actions.setSubmitting(true);
-                        let {error, data} = await submit({ code: values.code.parts.join("") })
+                        let { error, data } = await submit({ code: values.code.parts.join("") })
                         if (error === null) {
                             next()
                         }

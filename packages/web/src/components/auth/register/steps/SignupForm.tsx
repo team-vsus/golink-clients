@@ -1,8 +1,9 @@
-import { Button, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputRightElement, Link, Text, VStack } from '@chakra-ui/react';
+import { Button, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputRightElement, Link, Text, VStack, Switch } from '@chakra-ui/react';
 import { RegisterData, ControllerResponse } from '@golink-clients/common';
-import { Field, Form, Formik } from 'formik';
-import React, { useState } from 'react';
+import { Field, Form, Formik, getIn, useFormikContext } from 'formik';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { useIsApplicant } from '../../../../store/useIsApplicant';
 
 type Props = {
     isDesktop: boolean;
@@ -12,6 +13,7 @@ type Props = {
 
 const SignupForm: React.FC<Props> = ({ isDesktop, next, submit }) => {
     const [show, setShow] = useState(false);
+    const { setApplicant, isApplicant } = useIsApplicant();
 
     return (
         <>
@@ -25,7 +27,8 @@ const SignupForm: React.FC<Props> = ({ isDesktop, next, submit }) => {
                         firstname: '',
                         lastname: '',
                         email: '',
-                        password: ''
+                        password: '',
+                        applicant: false
                     }}
                     onSubmit={async (values, actions) => {
                         actions.setSubmitting(true);
@@ -35,7 +38,7 @@ const SignupForm: React.FC<Props> = ({ isDesktop, next, submit }) => {
                         }
                         actions.setSubmitting(false);
                     }}
-                >{({ errors, isSubmitting, touched }) => (
+                >{({ errors, isSubmitting, touched, handleChange, values }) => (
                     <Form>
                         <HStack>
                             <FormControl isInvalid={!!errors.firstname && touched.firstname}>
@@ -71,6 +74,15 @@ const SignupForm: React.FC<Props> = ({ isDesktop, next, submit }) => {
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
+                        </FormControl>
+                        <FormControl display='flex' alignItems='center' mt={4} justifyContent="center">
+                            <FormLabel htmlFor='candidate' mb='0'>
+                                Are you a candidate?
+                            </FormLabel>
+                            <Field as={Switch} id='candidate' name="applicant" onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                setApplicant(e.currentTarget.checked);
+                                handleChange(e);
+                            }} />
                         </FormControl>
                         <Button colorScheme='brand' isLoading={isSubmitting} type="submit" mt={4} w="100%">Submit</Button>
                     </Form>

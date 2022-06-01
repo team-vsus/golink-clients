@@ -1,11 +1,15 @@
 import { Box, Tab, TabList, TabPanel, TabPanels, Tabs, Flex, Text, Icon, IconButton } from '@chakra-ui/react';
 import JobsTopBar from "../shared/JobsTopBar";
-import PipeLine from './Pipeline';
+import Pipeline from './Pipeline';
 import { ArrowLeft } from '@mui/icons-material';
+import MainWrapper from '../shared/MainWrapper';
+import { useParams } from 'react-router-dom';
 
-export const JobAdView: React.FC = () => {
+export const JobOfferView: React.FC = () => {
+    const params = useParams();
+
     return (
-        <main>
+        <MainWrapper>
             <Box p={4}>
                 <JobsTopBar></JobsTopBar>
                 <Flex alignItems="center" mt={5}>
@@ -26,11 +30,11 @@ export const JobAdView: React.FC = () => {
                             <p>one!</p>
                         </TabPanel>
                         <TabPanel>
-                            <PipeLine />
+                            <Pipeline />
                         </TabPanel>
                     </TabPanels>
                 </Tabs>
             </Box>
-        </main>
+        </MainWrapper>
     );
 }

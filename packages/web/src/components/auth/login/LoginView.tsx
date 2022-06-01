@@ -23,9 +23,9 @@ const LoginView: React.FC<Props> = ({ submit }) => {
 
     const { data, isLoading, isFetching } = useMe();
 
-    /*if (isLoading || isFetching) {
+    if (isLoading || isFetching) {
         return null;
-    }*/
+    }
 
     if (data && !data.failed) {
         return <Navigate to="/app?from=login" />

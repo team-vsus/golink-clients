@@ -6,6 +6,9 @@ import RegisterConnector from './components/auth/register/RegisterConnector';
 import { CandidateList } from './components/candidates/CandidateList';
 import { Home } from './components/main/Home';
 import JobsView from './components/jobs/JobOffersList';
+import { JobOfferView } from './components/jobs/JobOfferView';
+import Chat from './components/chat/Chat';
+import Settings from './components/settings/Settings';
 
 function App() {
     return (
@@ -13,8 +16,11 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/app" element={<Home />} />
+                    <Route path="/app/settings" element={<Settings />} />
                     <Route path="/app/candidates" element={<CandidateList />} />
                     <Route path="/app/job-offers" element={<JobsView />} />
+                    <Route path="/app/job-offers/:id" element={<JobOfferView />} />
+                    <Route path="/app/chat" element={<Chat />} />
                     <Route path="/auth/login" element={<LoginConnector />} />
                     <Route path="/auth/register" element={<RegisterConnector />} />
                     <Route path="/auth/forgot-pw" element={<ForgotPasswordConnector />} />

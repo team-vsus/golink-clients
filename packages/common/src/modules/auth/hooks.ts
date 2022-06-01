@@ -48,7 +48,7 @@ const register = async (user: RegisterData) => {
     });
     if (response.status === 200)
         return response.json();
-    return new Promise((res) => res({ failed: true }));
+    throw new Error("Something happened");
 }
 
 export const useRegister = (options?: Omit<UseMutationOptions<any, unknown, any, unknown>, "mutationFn"> | undefined) => {
@@ -94,7 +94,7 @@ const confirmCode = async (data: VerificationData) => {
     });
     if (res.status === 200)
         return res.json();
-    return new Promise((res) => res({ failed: true }));
+    throw new Error("Something happened");
 }
 
 export const useConfirmCode = (options?: Omit<UseMutationOptions<any, unknown, any, unknown>, "mutationFn"> | undefined) => {
@@ -111,7 +111,8 @@ const createCompany = async (data: CompanyData) => {
     });
     if (res.status === 200)
         return res.json();
-    return new Promise((res) => res({ failed: true }));
+    //return new Promise((res) => res({ failed: true }));
+    throw new Error("Something happened");
 }
 
 export const useCreateCompany = (options?: Omit<UseMutationOptions<any, unknown, any, unknown>, "mutationFn"> | undefined) => {

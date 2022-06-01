@@ -29,7 +29,7 @@ interface Props {
 
 }
 
-const PipeLine: React.FC<Props> = () => {
+const Pipeline: React.FC<Props> = () => {
     /*const { data, isLoading } = useQuery<Response<ColumnAttributes[]>>(
         "columns",
         () => getColumns(board.id)
@@ -120,7 +120,9 @@ const PipeLine: React.FC<Props> = () => {
             <DragDropContext onDragEnd={onDragEnd}>
                 <VStack h="100%" spacing={5}>
                     <HStack alignItems="flex-start" w="100%" spacing={5}>
-                        <KanbanColumn></KanbanColumn>
+                        <KanbanColumn id={0}></KanbanColumn>
+                        <KanbanColumn id={1}></KanbanColumn>
+                        <KanbanColumn id={2}></KanbanColumn>
                         {/*{data &&
                             data.success &&
                             data.data.length !== 0 &&
@@ -135,10 +137,10 @@ const PipeLine: React.FC<Props> = () => {
 };
 
 type KanbanColumnProps = {
+    id: number;
 };
 
-const KanbanColumn: React.FC<KanbanColumnProps> = () => {
-    let id = 0;
+const KanbanColumn: React.FC<KanbanColumnProps> = ({id}) => {
     return (
         <>
             <Box
@@ -197,6 +199,23 @@ const KanbanColumn: React.FC<KanbanColumnProps> = () => {
                                                 )}
                                             </Draggable>
                                         ))}*/}
+
+                                    <Draggable
+                                        key={1}
+                                        draggableId={"1"}
+                                        index={0}
+                                    >
+                                        {(
+                                            providedDraggable: DraggableProvided,
+                                            snapshotDraggable: DraggableStateSnapshot
+                                        ) => (
+                                            <KanbanTask
+                                                date={"Jun 24"}
+                                                content={"test"}
+                                                providedDraggable={providedDraggable}
+                                            />
+                                        )}
+                                    </Draggable>
                                     {provided.placeholder}
                                 </VStack>
                             )}
@@ -229,7 +248,7 @@ const KanbanTask: React.FC<KanbanTaskProps> = ({
             w="100%"
             borderRadius="10px"
             p="10px"
-            bg="var(--background-primary)"
+            bg="brand.800"
         >
             <VStack>
                 <Flex w="100%" justifyContent="space-between" alignItems="center">
@@ -258,4 +277,4 @@ const KanbanTask: React.FC<KanbanTaskProps> = ({
     );
 };
 
-export default PipeLine;
+export default Pipeline;
