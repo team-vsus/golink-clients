@@ -3,6 +3,7 @@ import { RegisterData, ControllerResponse } from '@golink-clients/common';
 import { Field, Form, Formik, getIn, useFormikContext } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { useAlerts } from '../../../../store/useAlerts';
 import { useIsApplicant } from '../../../../store/useIsApplicant';
 
 type Props = {
@@ -14,6 +15,7 @@ type Props = {
 const SignupForm: React.FC<Props> = ({ isDesktop, next, submit }) => {
     const [show, setShow] = useState(false);
     const { setApplicant, isApplicant } = useIsApplicant();
+    const {add} = useAlerts();
 
     return (
         <>
@@ -35,6 +37,8 @@ const SignupForm: React.FC<Props> = ({ isDesktop, next, submit }) => {
                         let res = await submit(values)
                         if (res.error === null) {
                             next();
+                        } else {
+                            add("There was an error!", "error");
                         }
                         actions.setSubmitting(false);
                     }}

@@ -1,4 +1,4 @@
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { Routes, Route, BrowserRouter, useNavigate } from 'react-router-dom';
 import ForgotPasswordConnector from './components/auth/forgot-pw/ForgotPasswordConnector';
 import ResetPasswordConnector from './components/auth/forgot-pw/ResetPasswordConnector';
 import LoginConnector from './components/auth/login/LoginConnector';
@@ -9,12 +9,16 @@ import JobsView from './components/jobs/JobOffersList';
 import { JobOfferView } from './components/jobs/JobOfferView';
 import Chat from './components/chat/Chat';
 import Settings from './components/settings/Settings';
+import { useEffect } from 'react';
+import Alerts from './components/shared/Alerts';
 
 function App() {
     return (
         <>
+            <Alerts />
             <BrowserRouter>
                 <Routes>
+                    <Route path="/" element={<RedirectToLogin />} />
                     <Route path="/app" element={<Home />} />
                     <Route path="/app/settings" element={<Settings />} />
                     <Route path="/app/candidates" element={<CandidateList />} />
@@ -30,6 +34,12 @@ function App() {
         </>
 
     )
+}
+
+const RedirectToLogin = () => {
+    const nav = useNavigate()
+    useEffect(() => nav("/auth/login"), [])
+    return (<></>);
 }
 
 export default App;

@@ -2,15 +2,49 @@
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, UseDisclosureProps, VStack, FormControl, FormHelperText, FormLabel, Input, Textarea, InputGroup, InputLeftElement, Select, HStack } from '@chakra-ui/react';
 import { Formik, Form, Field } from 'formik';
 import React from 'react';
+import { useGlobalData } from '../../store/useGlobalData';
+import { JobAd } from '../../types';
+import { genId } from '../../utils/utils';
+import { DateTime } from 'luxon';
+import { createJobOffer } from '../../api/joboffers';
+import { useMutation, useQueryClient } from 'react-query';
 
 type Props = {
     disclosure: UseDisclosureProps;
 }
-type MyFormValues = {
-    jobTitle: string;
-}
+
 const CreateJobOfferModal: React.FC<Props> = ({ disclosure: { isOpen, onClose } }) => {
-    const initialValues: MyFormValues = { jobTitle: '' };
+    const initialValues: JobAd = {
+        name: '',
+        applicantsCounts: 0,
+        country: '',
+        city: '',
+        open: true,
+        createdAt: DateTime.now().toLocaleString(DateTime.DATE_MED),
+        description: '',
+        salary: 0
+    };
+    const queryClient = useQueryClient();
+
+    const createJobOfferMutation = useMutation(createJobOffer, {
+        onMutate: (d) => {
+            queryClient.cancelQueries("joboffers");
+
+            const snapshot = queryClient.getQueryData<JobAd[]>("joboffers");
+
+            snapshot && queryClient.setQueryData<JobAd[]>("joboffers", prev => ({
+                ...[...snapshot, d]
+            }));
+
+            return { snapshot };
+        },
+        onError: (_, __, context: any) => {
+            if (context?.snapshot) {
+                queryClient.setQueryData<JobAd[]>('joboffers', context.snapshot);
+            }
+        },
+        onSettled: () => queryClient.invalidateQueries("joboffers"),
+    })
 
     return (
         <Modal isOpen={isOpen!} onClose={onClose!} size="xl">
@@ -22,19 +56,23 @@ const CreateJobOfferModal: React.FC<Props> = ({ disclosure: { isOpen, onClose } 
                     <Formik
                         initialValues={initialValues}
                         onSubmit={(values, actions) => {
+                            actions.setSubmitting(true);
+                            //addJob({ ...values, id: genId() });
+                            createJobOfferMutation.mutate(values);
                             console.log(values);
                             actions.setSubmitting(false);
+                            onClose!();
                         }}
                     >
                         <Form>
                             <VStack spacing={3}>
                                 <FormControl>
                                     <FormLabel htmlFor='jobTitle'>Job Title</FormLabel>
-                                    <Field as={Input} id='jobTitle' type='text' name="jobTitle" placeholder="Enter job title" />
+                                    <Field as={Input} id='jobTitle' type='text' name="name" placeholder="Enter job title" />
                                 </FormControl>
                                 <FormControl>
                                     <FormLabel htmlFor='intro'>Intro</FormLabel>
-                                    <Field as={Textarea} id='intro' type='text' name="intro" />
+                                    <Field as={Textarea} id='intro' type='text' name="description" />
                                     <FormHelperText>Include a brief introduction about your company.</FormHelperText>
                                 </FormControl>
                                 <FormControl>
@@ -74,12 +112,10 @@ const CreateJobOfferModal: React.FC<Props> = ({ disclosure: { isOpen, onClose } 
                                     </FormControl>
                                 </HStack>
                             </VStack>
+                            <Button colorScheme="brand" w="100%" type="submit" mt={4} mb={4}>Submit</Button>
                         </Form>
                     </Formik>
                 </ModalBody>
-                <ModalFooter>
-                    <Button colorScheme="brand" w="100%">Submit</Button>
-                </ModalFooter>
             </ModalContent>
         </Modal>
     );

@@ -4,7 +4,7 @@ import { Conversation } from '../types';
 
 type Selection = Conversation | null;
 
-export const useSelectedConv = create(
+export const useSelectedSetting = create(
     combine(
         {
             selectedConv: null as Selection,

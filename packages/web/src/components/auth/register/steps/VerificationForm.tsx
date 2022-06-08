@@ -3,6 +3,7 @@ import { ControllerResponse, VerificationData } from '@golink-clients/common';
 import { Field, Form, Formik } from 'formik';
 import React from 'react';
 import { useIsApplicant } from '../../../../store/useIsApplicant';
+import { useRegisteredUser } from '../../../../store/useRegisteredUser';
 
 type Props = {
     isDesktop: boolean;
@@ -12,6 +13,7 @@ type Props = {
 
 const VerificationForm: React.FC<Props> = ({ isDesktop, next, submit }) => {
     const { isApplicant } = useIsApplicant();
+    const { setUserId } = useRegisteredUser();
     return (
         <>
             <VStack spacing={5} padding="50px" h="100%" w={!isDesktop ? "100%" : "442px"} align="normal" justify="center">
@@ -27,6 +29,7 @@ const VerificationForm: React.FC<Props> = ({ isDesktop, next, submit }) => {
                         actions.setSubmitting(true);
                         let { error, data } = await submit({ code: values.code.parts.join("") })
                         if (error === null) {
+                            setUserId(data.id);
                             next()
                         }
                         actions.setSubmitting(false);
@@ -37,7 +40,7 @@ const VerificationForm: React.FC<Props> = ({ isDesktop, next, submit }) => {
                             <InputGroup justifyContent="center">
                                 <HStack>
                                     <PinInput type="alphanumeric">
-                                        {new Array(6).fill(0).map((_, i) => <Field name={`code.parts[${i}]`} as={PinInputField} />)}
+                                        {new Array(6).fill(0).map((_, i) => <Field key={i} name={`code.parts[${i}]`} as={PinInputField} />)}
                                     </PinInput>
                                 </HStack>
                             </InputGroup>

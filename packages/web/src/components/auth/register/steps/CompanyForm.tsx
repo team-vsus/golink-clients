@@ -2,6 +2,8 @@ import { CompanyData, ControllerResponse } from '@golink-clients/common';
 import { Button, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputLeftElement, InputRightElement, Link, PinInput, PinInputField, Select, Text, VStack } from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
 import React, { useState } from 'react';
+import { useRegisteredUser } from '../../../../store/useRegisteredUser';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
     isDesktop: boolean;
@@ -10,6 +12,8 @@ type Props = {
 }
 
 const CompanyForm: React.FC<Props> = ({ isDesktop, next, submit }) => {
+    const { userId } = useRegisteredUser();
+    const nav = useNavigate();
 
     return (
         <>
@@ -23,14 +27,15 @@ const CompanyForm: React.FC<Props> = ({ isDesktop, next, submit }) => {
                         name: '',
                         websiteUrl: '',
                         address: '',
-                        phone: '',
                         country: ''
                     }}
                     onSubmit={async (values, actions) => {
                         actions.setSubmitting(true);
-                        let res = await submit(values)
+                        console.log("Userid", userId);
+                        if (!userId) return;
+                        let res = await submit({ ...values, userId });
                         if (res.error === null) {
-                            next();
+                            nav("/auth/login")
                         }
                         actions.setSubmitting(false);
                     }}

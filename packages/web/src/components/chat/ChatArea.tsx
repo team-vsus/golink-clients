@@ -4,8 +4,13 @@ import React from 'react';
 import { Smile } from 'react-feather';
 import MessageBox from './MessageBox';
 import { scrollbarStyles } from '../../utils/scrollbarStyles';
+import { useSelectedConv } from '../../store/useSelectedConv';
+import { genId } from '../../utils/utils';
+import { useGlobalData } from '../../store/useGlobalData';
+import { DateTime } from 'luxon';
 
 const ChatArea: React.FC = () => {
+    const { selectedConv } = useSelectedConv();
 
     return (
         <Flex
@@ -24,7 +29,7 @@ const ChatArea: React.FC = () => {
                     alignItems="center"
                 >
                     <Avatar />
-                    <Text fontSize="xl" fontWeight="bold" color="brand.500" ml={4}>Max Mustermann</Text>
+                    <Text fontSize="xl" fontWeight="bold" color="brand.500" ml={4}>{selectedConv?.firstname} {selectedConv?.lastname}</Text>
                 </Flex>
                 <Button colorScheme="brand" variant="outline">View Candidate</Button>
             </Flex>
@@ -32,6 +37,7 @@ const ChatArea: React.FC = () => {
                 bg="white"
                 margin="5px"
                 overflow="hidden"
+                h="100%"
             >
                 <Flex flexDirection="column" p="0 15px" h="100%">
                     <VStack
@@ -42,7 +48,8 @@ const ChatArea: React.FC = () => {
                             ...scrollbarStyles,
                         }}
                     >
-                        {Array.from(Array(10).keys()).map((_, i) => <MessageBox key={i} username={"Max Mustermann"} createdAt={"23. May"} content={"test"} />)}
+                        {/*Array.from(Array(10).keys()).map((_, i) => <MessageBox key={i} username={"Max Mustermann"} createdAt={"23. May"} content={"test"} />)*/}
+                        {selectedConv?.messages.map((m, i) => <MessageBox key={i} username={`${m.firstname} ${m.lastname}`} createdAt={m.date} content={m.content} />)}
                     </VStack>
 
                     <ChatInput />
@@ -58,12 +65,17 @@ const ChatInput = () => {
         setValue(e.target.value);
     }
 
+    const { addMessage, conversations } = useGlobalData();
+    const { selectedConv } = useSelectedConv();
+    const convo = conversations.find(c => c.id === selectedConv?.id);
+
     return (
         <>
             <Flex
                 flex="1"
                 alignItems="center"
                 w="100%"
+                mt="auto"
             >
                 <Box w="100%">
                     <Box
@@ -81,6 +93,19 @@ const ChatInput = () => {
                     >
                         <FormInput
                             value={value}
+                            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                                if (e.key === "Enter" && value !== "") {
+                                    console.log()
+                                    addMessage(selectedConv?.id!, {
+                                        id: genId(),
+                                        content: value,
+                                        date: DateTime.now().toLocaleString(DateTime.DATE_MED),
+                                        firstname: 'Murat',
+                                        lastname: 'Ahmed',
+                                    })
+                                    setValue("");
+                                }
+                            }}
                             onChange={handleChange}
                             placeholder="Enter a Text"
                         />

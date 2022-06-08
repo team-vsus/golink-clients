@@ -1,9 +1,21 @@
 import { Box, Text, Tabs, TabList, Tab, TabPanels, TabPanel } from '@chakra-ui/react';
+import { useAuth } from '@golink-clients/common';
+import { useJobOffers } from '../../api/joboffers';
+import { useGlobalData } from '../../store/useGlobalData';
+import { JobAd } from '../../types';
 import JobsTopBar from "../shared/JobsTopBar";
+import Loader from '../shared/Loader';
 import MainWrapper from '../shared/MainWrapper';
 import { JobAdItem } from './JobOffersItem';
 
 const JobsView: React.FC = () => {
+    useAuth();
+    //const { jobs } = useGlobalData();
+    const query = useJobOffers();
+    console.log("Daata", query.data);
+    if (query.isLoading) {
+        return <Loader />;
+    }
     return (
         <MainWrapper>
             <Box p={4}>
@@ -17,15 +29,37 @@ const JobsView: React.FC = () => {
                     </TabList>
                     <TabPanels>
                         <TabPanel p={0}>
+                            {query.data.map((job: JobAd) => (
+                                <JobAdItem
+                                    jobTitle={job.name}
+                                    location={`${job.country}, ${job.city}`}
+                                    createdAt={job.createdAt}
+                                    appliedCount={job.applicantsCounts ?? 0}
+                                    jobType="Part Time" />
+                            ))}
+                            {/*<JobAdItem jobTitle='Front-end Developer (m/f)' location="Vienna, Austria" createdAt='Jun 31, 2018' appliedCount={4} jobType="Part Time" />
                             <JobAdItem jobTitle='Front-end Developer (m/f)' location="Vienna, Austria" createdAt='Jun 31, 2018' appliedCount={4} jobType="Part Time" />
-                            <JobAdItem jobTitle='Front-end Developer (m/f)' location="Vienna, Austria" createdAt='Jun 31, 2018' appliedCount={4} jobType="Part Time" />
-                            <JobAdItem jobTitle='Front-end Developer (m/f)' location="Vienna, Austria" createdAt='Jun 31, 2018' appliedCount={4} jobType="Part Time" />
+                            <JobAdItem jobTitle='Front-end Developer (m/f)' location="Vienna, Austria" createdAt='Jun 31, 2018' appliedCount={4} jobType="Part Time" />*/}
                         </TabPanel>
-                        <TabPanel>
-                            <p>two!</p>
+                        <TabPanel p={0}>
+                            {query.data.filter((j: JobAd) => j.open).map((job: JobAd) => (
+                                <JobAdItem
+                                    jobTitle={job.name}
+                                    location={`${job.country}, ${job.city}`}
+                                    createdAt={job.createdAt}
+                                    appliedCount={0}
+                                    jobType="Part Time" />
+                            ))}
                         </TabPanel>
-                        <TabPanel>
-                            <p>three!</p>
+                        <TabPanel p={0}>
+                            {query.data.filter((j: JobAd) => !j.open).map((job: JobAd) => (
+                                <JobAdItem
+                                    jobTitle={job.name}
+                                    location={`${job.country}, ${job.city}`}
+                                    createdAt='Jun 31, 2018'
+                                    appliedCount={0}
+                                    jobType="Part Time" />
+                            ))}
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

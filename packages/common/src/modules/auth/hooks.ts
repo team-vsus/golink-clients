@@ -102,7 +102,7 @@ export const useConfirmCode = (options?: Omit<UseMutationOptions<any, unknown, a
 }
 
 const createCompany = async (data: CompanyData) => {
-    const res = await fetch(`${BASE_URL}/api/v1/company`, {
+    const res = await fetch(`${BASE_URL}/api/v1/companies`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",

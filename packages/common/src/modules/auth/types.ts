@@ -35,8 +35,8 @@ export type CompanyData = {
     name: string;
     websiteUrl: string;
     address: string;
-    phone: string;
     country: string;
+    userId: number;
 }
 
 export type AuthUser = {

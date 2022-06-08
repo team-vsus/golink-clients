@@ -2,8 +2,10 @@ import { Box, Heading } from '@chakra-ui/react'
 import { TableActions } from './TableActions'
 import { TableContent } from './TableContent'
 import MainWrapper from '../shared/MainWrapper';
+import { useAuth } from '@golink-clients/common';
 
 export const CandidateList = () => {
+    useAuth();
 
     return (
         <MainWrapper>

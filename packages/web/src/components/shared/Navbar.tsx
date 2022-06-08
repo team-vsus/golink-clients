@@ -2,11 +2,14 @@ import { Box, Icon, Text, Flex, Avatar, Heading, useDisclosure } from '@chakra-u
 import React from 'react';
 import { LinkItem } from '../../types';
 import NavItem from './NavItem';
-import { ArrowCircleLeft, ArrowCircleRight, ArrowRight, Menu, Settings } from '@mui/icons-material';
+import { ArrowCircleLeft, ArrowCircleRight, ArrowRight, Logout, Menu, Settings } from '@mui/icons-material';
 import SettingsModal from '../main/SettingsModal';
 import { Link, useLocation } from 'react-router-dom';
 import { Dashboard, PeopleAlt, Work, Chat } from '@mui/icons-material';
 import { useNavsize } from '../../store/useNavsize';
+import LogoutModal from './LogoutModal';
+import { useQuery, useQueryClient } from 'react-query';
+import { getCompany } from '../../api/company';
 
 const linkItems: LinkItem[] = [
     { title: "Dashboard", icon: Dashboard, to: "/app" },
@@ -19,10 +22,13 @@ const linkItems: LinkItem[] = [
 
 const Navbar: React.FC = () => {
     //const [isOpen, setOpenNav] = React.useState(false);
-    const {isNavOpen, setNavOpen} = useNavsize();
-    const settingsDisclosure = useDisclosure()
+    const { isNavOpen, setNavOpen } = useNavsize();
+    const logoutDisclosure = useDisclosure()
     const location = useLocation();
-    console.log("Loc", location);
+    const queryClient = useQueryClient();
+    const me: any = queryClient.getQueryData("me");
+    console.log("Loc", me)
+    const company: any = queryClient.getQueryData("myCompany");
 
     return (
         <>
@@ -53,12 +59,40 @@ const Navbar: React.FC = () => {
                             h={"4rem"}
                         >
                             <Avatar size="md" minWidth="2rem" margin="0 1rem" />
-                            <Heading display={!isNavOpen ? "none" : "block"} color="brand.50" size="lg">Golink</Heading>
+                            <Heading display={!isNavOpen ? "none" : "block"} color="brand.50" size="lg">{company ? company.name : "test"}</Heading>
                         </Box>
-                    </Box>
+                </Box>
                     {linkItems.map((link, i) => (
                         <NavItem key={i} title={link.title} to={link.to} icon={link.icon} isOpen={isNavOpen} isSelected={link.to === location.pathname} />
                     ))}
+                    <Box
+                        mt={4}
+                        w="100%"
+                        position="relative"
+                        sx={{
+                            "&:hover": {
+                                bg: 'brand.700',
+                                cursor: 'pointer',
+                            },
+                        }}
+                        onClick={logoutDisclosure.onOpen}
+                        transition="all 200ms ease"
+                    >
+                        <Box
+                            display="flex"
+                            alignItems="center"
+                            w="100%"
+                            h={12}
+                        >
+                            <Icon as={Logout} fontSize="3xl" minWidth="2rem" margin="0 1.5rem" color={"#DA5353"} />
+                            <Text
+                                visibility={!isNavOpen ? "hidden" : "visible"}
+                                opacity={!isNavOpen ? "0" : "1"}
+                                transition="visibility 0s, opacity 300ms ease"
+                                color={"#DA5353"}
+                            >Logout</Text>
+                        </Box>
+                    </Box>
 
                     <Box
                         w="100%"
@@ -98,7 +132,6 @@ const Navbar: React.FC = () => {
                                         cursor: 'pointer'
                                     }
                                 }}
-                                onClick={settingsDisclosure.onOpen}
                                 size="md"
                                 minWidth="2rem"
                                 margin="0 1rem" />
@@ -108,14 +141,14 @@ const Navbar: React.FC = () => {
                                 transition="visibility 0s, opacity 200ms ease"
                                 flexDir="column"
                             >
-                                <Heading as="h3" size="sm" color="brand.50">Ahmed Murat</Heading>
-                                <Text color="brand.200">Admin</Text>
+                                <Heading as="h3" size="sm" color="brand.50">{`${me.firstname} ${me.lastname}`}</Heading>
+                                <Text color="brand.200">{me.applicant ? "Candidate" : "Recruiter"}</Text>
                             </Flex>
                         </Box>
                     </Box>
                 </Box>
             </Box>
-            <SettingsModal disclosure={settingsDisclosure} />
+            <LogoutModal disclosure={logoutDisclosure} />
         </>
     );
 }
