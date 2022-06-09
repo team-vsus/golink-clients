@@ -5,9 +5,11 @@ import MainWrapper from '../shared/MainWrapper';
 import ChatArea from './ChatArea';
 import Sidebar from './Sidebar';
 import { useQueryClient } from 'react-query'
-import { useSocket } from '../../store/useSocket';
+import { useSocket } from '../../hooks/useSocket';
 import { useEffect } from 'react';
 import { useAuth } from '@golink-clients/common';
+import Loader from '../shared/Loader';
+import { SocketProvider } from '../shared/SocketProvider';
 
 const Chat: React.FC = () => {
     useAuth();
@@ -15,16 +17,17 @@ const Chat: React.FC = () => {
     console.log(selectedConv);
 
     const queryClient = useQueryClient()
-    const { connect, socket, disconnect } = useSocket();
+    const socket = useSocket();
 
     useEffect(() => {
-        connect();
-        console.log("Socket", socket);
-        //socket?.on("message", console.log)
-        //socket?.emit("df", JSON.stringify({ "message": "hello" }))
+        if (!socket) return;
+        socket.off("message");
+        console.log("Listening on messages");
+        socket.on("message", console.log)
+    }, [socket]);
 
-        return () => disconnect()
-    }, []);
+    if (!socket) return <Loader />
+
 
     const me = queryClient.getQueryData("me");
     console.log("Me", me)
@@ -36,6 +39,7 @@ const Chat: React.FC = () => {
             >
                 <Sidebar />
                 {selectedConv === null ? <Box flex="4"></Box> : <ChatArea />}
+
             </Flex>
         </MainWrapper>
     );

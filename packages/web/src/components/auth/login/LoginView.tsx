@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { ControllerResponse, useMe } from "@golink-clients/common";
 import { Field, Form, Formik } from "formik";
 import React from "react";
-import { useNavigate, Link as RouterLink, Navigate } from "react-router-dom";
+import { useNavigate, Link as RouterLink, Navigate, useSearchParams } from "react-router-dom";
 import Background from '../../../assets/login-bg.png';
 import { useAlerts } from "../../../store/useAlerts";
 import { Container } from '../../shared/Styles';
@@ -23,6 +23,7 @@ const LoginView: React.FC<Props> = ({ submit }) => {
     const [isDesktop] = useMediaQuery('(min-width: 1024px)')
     const nav = useNavigate()
     const { add } = useAlerts();
+    const [searchParams] = useSearchParams();
 
     const { data, isLoading, isFetching } = useMe();
 
@@ -53,7 +54,8 @@ const LoginView: React.FC<Props> = ({ submit }) => {
                                 let { error } = await submit(values);
                                 if (error === null) {
                                     add("Successfully logged in", "success");
-                                    nav("/app")
+                                    const next = searchParams.get("next")
+                                    next ? nav(next) : nav("/app")
                                 } else {
                                     add("Email or password is wrong", "error");
                                 }

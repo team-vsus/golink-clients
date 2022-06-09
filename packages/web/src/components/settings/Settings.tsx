@@ -3,8 +3,8 @@ import { useAuth } from '@golink-clients/common';
 import React from 'react';
 import { useGlobalData } from '../../store/useGlobalData';
 import MainWrapper from '../shared/MainWrapper';
-import ApplicationModal from './ApplicationModal';
-import CreateApplicationModal from './CreateApplicationModal';
+import ApplicationModal from './SocialMediaModal';
+import CreateApplicationModal from './AddSocialMediaModal';
 
 const Settings: React.FC = () => {
     useAuth();
@@ -30,8 +30,10 @@ const Settings: React.FC = () => {
                             bg: 'brand.100',
                             borderRadius: '5px'
                         }}
+                        bg="brand.100"
+                        borderRadius='5px'
                     >
-                        <Text>Invite</Text>
+                        <Text>Social Medias</Text>
                     </Flex>
 
                     <Flex
@@ -43,10 +45,8 @@ const Settings: React.FC = () => {
                             bg: 'brand.100',
                             borderRadius: '5px'
                         }}
-                        bg="brand.100"
-                        borderRadius='5px'
                     >
-                        <Text>Social Media</Text>
+                        <Text>Invite</Text>
                     </Flex>
                 </VStack>
                 <Box

@@ -120,9 +120,9 @@ const Pipeline: React.FC<Props> = () => {
             <DragDropContext onDragEnd={onDragEnd}>
                 <VStack h="100%" spacing={5}>
                     <HStack alignItems="flex-start" w="100%" spacing={5}>
-                        <KanbanColumn id={0}></KanbanColumn>
-                        <KanbanColumn id={1}></KanbanColumn>
-                        <KanbanColumn id={2}></KanbanColumn>
+                        <KanbanColumn id={0} name="Applied"></KanbanColumn>
+                        <KanbanColumn id={1} name="Screening"></KanbanColumn>
+                        <KanbanColumn id={2} name="Hired"></KanbanColumn>
                         {/*{data &&
                             data.success &&
                             data.data.length !== 0 &&
@@ -138,16 +138,17 @@ const Pipeline: React.FC<Props> = () => {
 
 type KanbanColumnProps = {
     id: number;
+    name: string;
 };
 
-const KanbanColumn: React.FC<KanbanColumnProps> = ({id}) => {
+const KanbanColumn: React.FC<KanbanColumnProps> = ({ id, name }) => {
     return (
         <>
             <Box
                 w="280px"
                 h="auto"
                 bg="brand.200"
-                borderRadius="10px"
+                borderRadius="5px"
             >
                 <Box>
                     <VStack
@@ -161,7 +162,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({id}) => {
                     >
                         <Flex justifyContent="space-between" alignItems="center" h="100%">
                             <Text color="brand.500" fontWeight="bold">
-                                test2
+                                {name}
                             </Text>
                             <Center
                                 h="32px"
@@ -246,19 +247,19 @@ const KanbanTask: React.FC<KanbanTaskProps> = ({
             {...providedDraggable.dragHandleProps}
             style={{ ...providedDraggable.draggableProps.style }}
             w="100%"
-            borderRadius="10px"
+            borderRadius="5px"
             p="10px"
-            bg="brand.800"
+            bg="brand.500"
         >
             <VStack>
                 <Flex w="100%" justifyContent="space-between" alignItems="center">
-                    <Text fontSize="16px" fontWeight="bold" color="var(--text-primary)">
-                        {date}
+                    <Text fontSize="16px" fontWeight="bold" color="white">
+                        Max Muster
                     </Text>
                     <Avatar size="sm" />
                 </Flex>
                 <Text fontSize="md" color="white" textAlign="start" w="100%">
-                    {content}
+                    Some notes
                 </Text>
                 <Flex
                     flexWrap="wrap"

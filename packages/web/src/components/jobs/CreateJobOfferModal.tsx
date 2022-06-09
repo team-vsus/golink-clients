@@ -14,7 +14,7 @@ type Props = {
 }
 
 const CreateJobOfferModal: React.FC<Props> = ({ disclosure: { isOpen, onClose } }) => {
-    const initialValues: JobAd = {
+    const initialValues: Omit<JobAd, "id"> = {
         name: '',
         applicantsCounts: 0,
         country: '',
@@ -32,9 +32,9 @@ const CreateJobOfferModal: React.FC<Props> = ({ disclosure: { isOpen, onClose } 
 
             const snapshot = queryClient.getQueryData<JobAd[]>("joboffers");
 
-            snapshot && queryClient.setQueryData<JobAd[]>("joboffers", prev => ({
-                ...[...snapshot, d]
-            }));
+            snapshot && queryClient.setQueryData<JobAd[]>("joboffers", prev => (
+                [...[...snapshot, { ...d, id: Date.now() }]]
+            ));
 
             return { snapshot };
         },
@@ -87,15 +87,15 @@ const CreateJobOfferModal: React.FC<Props> = ({ disclosure: { isOpen, onClose } 
                                 </FormControl>
                                 <FormControl>
                                     <FormLabel htmlFor='salary'>Salary</FormLabel>
-                                    <Field as={Input} id='salary' name="salary" placeholder="Enter amount" />
+                                    <Field as={Input} id='salary' name="salary" placeholder="Enter amount" type="number" />
                                 </FormControl>
 
                                 <FormControl>
                                     <FormLabel htmlFor='category'>Category</FormLabel>
                                     <Select placeholder='Select category' id="category">
-                                        <option value='option1'>Option 1</option>
-                                        <option value='option2'>Option 2</option>
-                                        <option value='option3'>Option 3</option>
+                                        <option value='option1'>Finance</option>
+                                        <option value='option2'>Marketing</option>
+                                        <option value='option3'>Engineering</option>
                                     </Select>
                                 </FormControl>
                                 <HStack

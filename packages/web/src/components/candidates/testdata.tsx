@@ -21,7 +21,7 @@ export const data = [
         user: {
             image:
                 'https://cdn.discordapp.com/emojis/719199148917915659.webp?size=100&quality=lossless',
-            name: 'Murat Ahmed',
+            name: '._.',
             email: 'murat@example.com',
         },
     },
@@ -32,7 +32,7 @@ export const data = [
         user: {
             image:
                 'https://cdn.discordapp.com/emojis/778318920641413190.webp?size=100&quality=lossless',
-            name: 'Murat Ahmed',
+            name: 'Szymon Kantor',
             email: 'murat@example.com',
         },
     },
@@ -43,7 +43,7 @@ export const data = [
         user: {
             image:
                 'https://cdn.discordapp.com/emojis/776761035994300427.webp?size=100&quality=lossless',
-            name: 'Murat Ahmed',
+            name: 'Edward Tahiti',
             email: 'murat@example.com',
         },
     },
@@ -54,7 +54,7 @@ export const data = [
         user: {
             image:
                 'https://cdn.discordapp.com/emojis/660475159752343552.webp?size=100&quality=lossless',
-            name: 'Murat Ahmed',
+            name: 'kal',
             email: 'murat@example.com',
         },
     },
@@ -65,7 +65,7 @@ export const data = [
         user: {
             image:
                 'https://cdn.discordapp.com/emojis/660475159752343552.webp?size=100&quality=lossless',
-            name: 'Murat Ahmed',
+            name: 'Tahiti 2',
             email: 'murat@example.com',
         },
     },
@@ -76,7 +76,7 @@ export const data = [
         user: {
             image:
                 'https://cdn.discordapp.com/emojis/660475159752343552.webp?size=100&quality=lossless',
-            name: 'Murat Ahmed',
+            name: 'Sel Hank',
             email: 'murat@example.com',
         },
     },
@@ -87,7 +87,7 @@ export const data = [
         user: {
             image:
                 'https://cdn.discordapp.com/emojis/660475159752343552.webp?size=100&quality=lossless',
-            name: 'Murat Ahmed',
+            name: 'Wiktor Raiman',
             email: 'murat@example.com',
         },
     },

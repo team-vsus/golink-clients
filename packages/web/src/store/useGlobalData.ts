@@ -12,7 +12,7 @@ type State = {
     conversations: Conversation[];
     addConv: (conv: Conversation) => void;
     messages: Message[];
-    addMessage: (id: string, msg: Message) => void;
+    //addMessage: (id: number, msg: Message) => void;
     applications: Application[];
     addApplication: (app: Application) => void;
 }
@@ -24,22 +24,14 @@ export const useGlobalData = create<State>((set) => ({
         return { jobs: [...state.jobs, job] };
     }),
     //removeJob: (id: string) => set((state) => ({ jobs: state.jobs.filter(job => job.id !== id) })),
-    conversations: [
-        {
-            id: genId(),
-            firstname: 'Max',
-            lastname: 'Muster',
-            date: DateTime.now().toLocaleString(DateTime.DATE_MED),
-            messages: []
-        }
-    ],
+    conversations: [],
     addConv: (conv: Conversation) => set((state) => {
         return { conversations: [...state.conversations, conv] };
     }),
     messages: [],
-    addMessage: (id: string, msg: Message) => set((state) => {
+    /*addMessage: (id: number, msg: Message) => set((state) => {
         return { conversations: [...state.conversations.map(c => c.id === id ? { ...c, messages: [...c.messages, msg] } : c)] };
-    }),
+    }),*/
     applications: [],
     addApplication: (application: Application) => set((state) => {
         return { applications: [...state.applications, application] }

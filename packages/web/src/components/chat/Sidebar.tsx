@@ -1,13 +1,19 @@
 import { Flex, VStack, Text, Icon, Input, InputGroup, InputLeftElement, Avatar, Box } from '@chakra-ui/react';
 import React from 'react';
 import { Search } from 'react-feather';
+import { useQuery } from 'react-query';
+import { getChannels } from '../../api/channels';
 import { useGlobalData } from '../../store/useGlobalData';
 import { useSelectedConv } from '../../store/useSelectedConv';
 import { Conversation } from '../../types';
+import Loader from '../shared/Loader';
 
 const Sidebar: React.FC = () => {
 
-    const { conversations } = useGlobalData();
+    //const { conversations } = useGlobalData();
+    const channelQuery = useQuery("channels", getChannels);
+
+    if (channelQuery.isLoading) return <Loader />
 
     return (
         <VStack
@@ -34,10 +40,11 @@ const Sidebar: React.FC = () => {
                 <Text textTransform="uppercase" color="brand.300" fontSize="14px" fontWeight="bold">All Messages</Text>
             </Flex>
 
-            {conversations.map((c) => (
+            {(channelQuery.data as any).map((c: any, i: number) => (
                 <Convo
+                    key={i}
                     conv={c}
-                    lastSentText='Thank you'
+                    lastSentText=''
                     newMessagesCount={0}
                 />
             ))}
@@ -79,7 +86,7 @@ const Convo: React.FC<ConversationProps> = ({ conv, lastSentText, newMessagesCou
                     justifyContent="center"
                     ml={4}
                 >
-                    <Text fontWeight="bold" color="brand.600">{conv.firstname} {conv.lastname}</Text>
+                    <Text fontWeight="bold" color="brand.600">{`${(conv as any).firstname} ${(conv as any).lastname}`}</Text>
                     <Text fontSize="14px" color="brand.200">{lastSentText}</Text>
                 </Flex>
             </Flex>

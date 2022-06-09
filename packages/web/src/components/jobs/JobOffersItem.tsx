@@ -6,8 +6,9 @@ type Props = {
     createdAt: string;
     appliedCount: number;
     jobType: string;
+    onClick: React.MouseEventHandler<HTMLDivElement>;
 }
-export const JobAdItem: React.FC<Props> = ({ jobTitle, location, createdAt, appliedCount, jobType }) => {
+export const JobAdItem: React.FC<Props> = ({ jobTitle, location, createdAt, appliedCount, jobType, onClick }) => {
     return (
         <Box
             transition="200ms ease"
@@ -21,6 +22,7 @@ export const JobAdItem: React.FC<Props> = ({ jobTitle, location, createdAt, appl
             borderRadius="5px"
             bg="brand.50"
             mt={4}
+            onClick={onClick}
         >
             <Flex
                 p={4}

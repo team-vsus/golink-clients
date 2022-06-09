@@ -1,6 +1,7 @@
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, UseDisclosureProps, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useLogout } from "../../api/auth";
+import { useSelectedConv } from "../../store/useSelectedConv";
 
 type Props = {
     disclosure: UseDisclosureProps
@@ -9,6 +10,7 @@ type Props = {
 
 const LogoutModal: React.FC<Props> = ({ disclosure: { isOpen, onClose } }) => {
     const nav = useNavigate()
+    const { selectConv } = useSelectedConv();
     const logoutMutation = useLogout()
     return (
         <Modal isOpen={isOpen!} onClose={onClose!}>
@@ -27,7 +29,9 @@ const LogoutModal: React.FC<Props> = ({ disclosure: { isOpen, onClose } }) => {
                     <Button colorScheme="red" onClick={async () => {
                         const data = await logoutMutation.mutateAsync();
                         console.log("Data from logout", data);
-                            nav("/auth/login");
+                        selectConv(null);
+                        nav("/auth/login");
+
                     }}>Logout</Button>
                 </ModalFooter>
             </ModalContent>

@@ -11,7 +11,14 @@ export const getJobOffers = async () => {
 
 export const useJobOffers = () => useQuery('joboffers', getJobOffers);
 
-export const createJobOffer = async (joboffer: JobAd) => {
+export const getJobOffer = async (id: number) => {
+    const res = await fetch(`${BASE_URL}/api/v1/jobads/${id}`, {
+        credentials: 'include'
+    });
+    return res.json();
+}
+
+export const createJobOffer = async (joboffer: Omit<JobAd, "id">) => {
     const res = await fetch(`${BASE_URL}/api/v1/jobads`, {
         method: 'POST',
         headers: {

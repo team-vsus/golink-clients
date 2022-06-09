@@ -8,9 +8,25 @@ import { useSelectedConv } from '../../store/useSelectedConv';
 import { genId } from '../../utils/utils';
 import { useGlobalData } from '../../store/useGlobalData';
 import { DateTime } from 'luxon';
+import { getMessagesByChannel, useCreateMessage } from '../../api/channels';
+import { useQuery, useQueryClient } from 'react-query';
+import Loader from '../shared/Loader';
+import { useAlerts } from '../../store/useAlerts';
 
 const ChatArea: React.FC = () => {
     const { selectedConv } = useSelectedConv();
+    console.log("Selected Conv", selectedConv);
+    const queryClient = useQueryClient();
+    const me: any = queryClient.getQueryData("me");
+    const messageQuery = useQuery(["messages", selectedConv?.id], () => getMessagesByChannel(selectedConv!.id), {
+        retry: false
+    });
+
+    if (messageQuery.isLoading) {
+        return <Loader />
+    }
+
+    console.log("DATA", messageQuery);
 
     return (
         <Flex
@@ -29,7 +45,7 @@ const ChatArea: React.FC = () => {
                     alignItems="center"
                 >
                     <Avatar />
-                    <Text fontSize="xl" fontWeight="bold" color="brand.500" ml={4}>{selectedConv?.firstname} {selectedConv?.lastname}</Text>
+                    <Text fontSize="xl" fontWeight="bold" color="brand.500" ml={4}>{`${(selectedConv as any).firstname} ${(selectedConv as any).lastname}`}</Text>
                 </Flex>
                 <Button colorScheme="brand" variant="outline">View Candidate</Button>
             </Flex>
@@ -49,7 +65,11 @@ const ChatArea: React.FC = () => {
                         }}
                     >
                         {/*Array.from(Array(10).keys()).map((_, i) => <MessageBox key={i} username={"Max Mustermann"} createdAt={"23. May"} content={"test"} />)*/}
-                        {selectedConv?.messages.map((m, i) => <MessageBox key={i} username={`${m.firstname} ${m.lastname}`} createdAt={m.date} content={m.content} />)}
+                        {!messageQuery.isError && messageQuery.data.map((m: any, i: number) => {
+                            if (m.sender_id === me.id)
+                                return (<MessageBox key={i} username={`${me.firstname} ${me.lastname}`} createdAt={m.date} content={m.content} />)
+                            return (<MessageBox key={i} username={`${(selectedConv! as any).firstname} ${(selectedConv! as any).lastname}`} createdAt={m.date} content={m.content} />)
+                        })}
                     </VStack>
 
                     <ChatInput />
@@ -61,13 +81,31 @@ const ChatArea: React.FC = () => {
 
 const ChatInput = () => {
     const [value, setValue] = React.useState("");
+    const queryClient = useQueryClient();
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.value);
     }
+    const messageMutation = useCreateMessage({
+        onMutate: (msg) => {
+            queryClient.cancelQueries("messages");
 
-    const { addMessage, conversations } = useGlobalData();
+            const snapshot = queryClient.getQueryData<any>("messages");
+
+            snapshot && queryClient.setQueryData<any>("messages", (prev: any) => (
+                [...[...snapshot, { ...msg, id: Date.now() }]]
+            ));
+
+            return { snapshot };
+        },
+        onError: (_, __, context: any) => {
+            if (context?.snapshot) {
+                queryClient.setQueryData<any[]>('messages', context.snapshot);
+            }
+        },
+        onSettled: () => queryClient.invalidateQueries("messages"),
+    });
+
     const { selectedConv } = useSelectedConv();
-    const convo = conversations.find(c => c.id === selectedConv?.id);
 
     return (
         <>
@@ -95,14 +133,22 @@ const ChatInput = () => {
                             value={value}
                             onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                                 if (e.key === "Enter" && value !== "") {
+                                    messageMutation.mutate({
+                                        id: Date.now(),
+                                        content: value,
+                                        firstname: "Max",
+                                        lastname: "Muster",
+                                        date: new Date().toString(),
+                                        channel_id: selectedConv?.id
+                                    } as any);
                                     console.log()
-                                    addMessage(selectedConv?.id!, {
-                                        id: genId(),
+                                    /*addMessage(selectedConv?.id!, {
+                                        id: Date.now(),
                                         content: value,
                                         date: DateTime.now().toLocaleString(DateTime.DATE_MED),
                                         firstname: 'Murat',
                                         lastname: 'Ahmed',
-                                    })
+                                    })*/
                                     setValue("");
                                 }
                             }}

@@ -19,7 +19,7 @@ const CreateApplicationModal: React.FC<Props> = ({ disclosure: { isOpen, onClose
 
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Create Application</ModalHeader>
+                <ModalHeader>Add social media</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
 
@@ -40,7 +40,7 @@ const CreateApplicationModal: React.FC<Props> = ({ disclosure: { isOpen, onClose
                         <Form>
                             <VStack spacing={3}>
                                 <FormControl>
-                                    <FormLabel htmlFor='appName'>Application</FormLabel>
+                                    <FormLabel htmlFor='appName'>Social media</FormLabel>
                                     <Field as={Input} id='appName' type='text' name="appName" placeholder="Enter application name" />
                                 </FormControl>
 

@@ -11,13 +11,6 @@ import LogoutModal from './LogoutModal';
 import { useQuery, useQueryClient } from 'react-query';
 import { getCompany } from '../../api/company';
 
-const linkItems: LinkItem[] = [
-    { title: "Dashboard", icon: Dashboard, to: "/app" },
-    { title: "Job-Offers", icon: Work, to: "/app/job-offers" },
-    { title: "Candidates", icon: PeopleAlt, to: "/app/candidates" },
-    { title: "Chat", icon: Chat, to: "/app/chat" },
-    { title: "Settings", icon: Settings, to: "/app/settings" },
-];
 
 
 const Navbar: React.FC = () => {
@@ -29,6 +22,18 @@ const Navbar: React.FC = () => {
     const me: any = queryClient.getQueryData("me");
     console.log("Loc", me)
     const company: any = queryClient.getQueryData("myCompany");
+    const linkItems: LinkItem[] = [
+        { title: "Dashboard", icon: Dashboard, to: "/app" },
+        { title: "Job-Offers", icon: Work, to: "/app/job-offers" },
+        { title: "Candidates", icon: PeopleAlt, to: "/app/candidates" },
+        { title: "Chat", icon: Chat, to: "/app/chat" },
+        { title: "Settings", icon: Settings, to: "/app/settings" },
+    ];
+
+    const linkItemsCandidate: LinkItem[] = [
+        { title: "Dashboard", icon: Dashboard, to: "/app" },
+        { title: "Chat", icon: Chat, to: "/app/chat" },
+    ]
 
     return (
         <>
@@ -59,10 +64,10 @@ const Navbar: React.FC = () => {
                             h={"4rem"}
                         >
                             <Avatar size="md" minWidth="2rem" margin="0 1rem" />
-                            <Heading display={!isNavOpen ? "none" : "block"} color="brand.50" size="lg">{company ? company.name : "test"}</Heading>
+                            <Heading display={!isNavOpen ? "none" : "block"} color="brand.50" size="md">{company ? company.name : "test"}</Heading>
                         </Box>
-                </Box>
-                    {linkItems.map((link, i) => (
+                    </Box>
+                    {(me.applicant ? linkItemsCandidate : linkItems).map((link, i) => (
                         <NavItem key={i} title={link.title} to={link.to} icon={link.icon} isOpen={isNavOpen} isSelected={link.to === location.pathname} />
                     ))}
                     <Box
@@ -127,11 +132,7 @@ const Navbar: React.FC = () => {
                             h={"4rem"}
                         >
                             <Avatar
-                                sx={{
-                                    _hover: {
-                                        cursor: 'pointer'
-                                    }
-                                }}
+                                src={`https://ui-avatars.com/api/?name=${me.firstname}+${me.lastname}&bold=true`}
                                 size="md"
                                 minWidth="2rem"
                                 margin="0 1rem" />

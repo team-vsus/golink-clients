@@ -6,6 +6,7 @@ export type LinkItem = {
 }
 
 export type JobAd = {
+    id: number;
     name: string;
     description: string;
     salary: number;
@@ -17,16 +18,15 @@ export type JobAd = {
 }
 
 export type Conversation = {
-    id: string;
-    date: string;
-    firstname: string;
-    lastname: string;
-
-    messages: Message[];
+    id: number;
+    name: string;
+    candidate_id: number;
+    recruiter_id: number;
+    date: Date;
 }
 
 export type Message = {
-    id: string;
+    id: number;
     firstname: string;
     lastname: string;
     date: string;
