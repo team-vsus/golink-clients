@@ -15,6 +15,7 @@ const MainWrapper: React.FC = ({ children }) => {
                 transition="all 200ms ease"
                 ml={isNavOpen ? "220px" : "75px"}
                 w="100%"
+                bg="brand.50"
             >
                 {children}
             </Box>

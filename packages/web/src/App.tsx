@@ -4,6 +4,7 @@ import ResetPasswordConnector from './components/auth/forgot-pw/ResetPasswordCon
 import LoginConnector from './components/auth/login/LoginConnector';
 import RegisterConnector from './components/auth/register/RegisterConnector';
 import { CandidateList } from './components/candidates/CandidateList';
+import  { CandidateDetails }  from './components/candidate/CandidateDetails';
 import { Home } from './components/main/Home';
 import JobsView from './components/jobs/JobOffersList';
 import { JobOfferView } from './components/jobs/JobOfferView';
@@ -29,6 +30,8 @@ function App() {
                     <Route path="/auth/register" element={<RegisterConnector />} />
                     <Route path="/auth/forgot-pw" element={<ForgotPasswordConnector />} />
                     <Route path="/auth/reset-pw/:token" element={<ResetPasswordConnector />} />
+                    <Route path="/app/candidate/:id" element={<CandidateDetails />} />
+                    <Route path="/app/candidate/" element={<CandidateDetails />} />
                 </Routes>
             </BrowserRouter>
         </>

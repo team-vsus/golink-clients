@@ -12,8 +12,10 @@ import {
     Flex,
     Text,
     ButtonGroup,
+    
 } from '@chakra-ui/react'
 import { columns, data } from './testdata'
+import { Link } from "react-router-dom";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 
@@ -44,12 +46,16 @@ export const TableContent = () => {
                                 )
                             })}
                             <Td textAlign="right">
-                                <Button variant="link" colorScheme="black">
+                            
+                                <Link to="/app/candidate">
+                                <Button>
                                     <Icon
                                         as={ArrowForwardIosIcon}
                                         fontSize="3xl"
                                     />
-                                </Button>
+                                    </Button>
+                                </Link>
+                                
                             </Td>
                         </Tr>
                     ))}
